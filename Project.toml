@@ -1,0 +1,4 @@
+name = "CVX"
+uuid = "02b509be-4c1e-11e9-2a9f-2349b924a014"
+authors = ["Guillermo Angeris <guillean@stanford.edu>"]
+version = "0.1.0"
