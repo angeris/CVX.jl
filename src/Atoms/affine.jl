@@ -3,6 +3,6 @@ struct IndexExpression <: Expression
     indices::UnitRange{Int64}
 end
 
-curvature(e::IndexExpression) = curvature(e)
-slope(e::IndexExpression) = slope(e)
-sign(e::IndexExpression) = sign(e)
+curvature(e::IndexExpression) = curvature(e.child)
+slope(e::IndexExpression) = slope(e.child)
+sign(e::IndexExpression) = sign(e.child)
