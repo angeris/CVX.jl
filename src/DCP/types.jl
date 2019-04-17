@@ -1,9 +1,12 @@
 # Specifies all useful types
+module Types
 
 using LinearAlgebra: Adjoint
 using SparseArrays: SparseMatrixCSC
 
-export Curvature, Convex, Concave, Affine
+export Curvature, ConvexNotAffine, ConcaveNotAffine, Affine
+export Convex, Concave
+export AllowedArrays, ArrayOrNumber, ArrayOrAdjoint
 
 abstract type Curvature end
 
@@ -17,3 +20,5 @@ const Concave = Union{ConcaveNotAffine, Affine}
 const AllowedArrays = Union{Array{Float64}, SparseMatrixCSC{Float64}}
 const ArrayOrNumber = Union{Float64, AllowedArrays}
 const ArrayOrAdjoint = Union{AllowedArrays, Adjoint{Float64, <: AllowedArrays}}
+
+end

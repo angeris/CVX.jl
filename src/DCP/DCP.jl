@@ -1,5 +1,3 @@
-module DCP
 
-include("operations.jl")
 
-end
+include("types.jl")

@@ -1,5 +1,10 @@
-module Atoms
+# Include file for all atoms
+import Base.+, Base.-, Base.*
+import Base.size
 
-include("affine/affine.jl")
+include("../utilities/util.jl")
 
-end
+include("expressions.jl")
+
+include("variable.jl")
+include("affine.jl")
