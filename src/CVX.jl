@@ -2,11 +2,16 @@ module CVX
 
 using LinearAlgebra
 using SparseArrays
+using JuMP
 
-include("DCP/DCP.jl")
+import Base.+, Base.-, Base.*
 
-using .Types
+include("utils.jl")
 
-include("Atoms/Atoms.jl")
+include("types.jl")
+
+# Atoms
+include("variable.jl")
+include("affine_atoms.jl")
 
 end # module
