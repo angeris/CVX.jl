@@ -4,7 +4,7 @@ using LinearAlgebra
 using SparseArrays
 using JuMP
 
-import Base.+, Base.-, Base.*, Base.≤, Base.≥, Base.==
+import Base.+, Base.-, Base.*, Base.≤, Base.≥, Base.==, Base.getindex
 
 include("utils.jl")
 

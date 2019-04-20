@@ -4,7 +4,7 @@ export getindex
 
 struct IndexFunction <: DisciplinedFunction
     child::DisciplinedFunction
-    indices::UnitRange{Int64} # TODO: For now
+    indices::Union{Int64, UnitRange{Int64}} # TODO: For now
 end
 
 # There is probably a better thing to do here
@@ -12,8 +12,8 @@ curvature(f::IndexFunction) = curvature(f.child)
 slope(f::IndexFunction) = slope(f.child)
 sign(f::IndexFunction) = sign(f.child)
 
-getindex(v::Variable, idx::Int64) = IndexFunction(v, i:i)
-getindex(v::Variable, I::UnitRange{Int64}) = IndexFunction(v, I)
+getindex(v::DisciplinedFunction, idx::Int64) = IndexFunction(v, idx)
+getindex(v::DisciplinedFunction, I::UnitRange{Int64}) = IndexFunction(v, I)
 
 push_model!(m::Model, a::IndexFunction) = push_model!(m, a.child)[a.indices]
 
@@ -28,6 +28,8 @@ struct EqualityConstraintExpression <: ConstraintExpression
 end
 
 ==(lhs::DisciplinedFunction, rhs::DisciplinedFunction) = EqualityConstraintExpression(lhs, rhs)
+
+==(lhs::DisciplinedFunction, rhs::Real) = EqualityConstraintExpression(lhs, Constant(float(rhs)))
 
 function push_model!(m::Model, c::EqualityConstraintExpression)
     @constraint(m, push_model!(m, c.lhs) .== push_model!(m, c.rhs))
