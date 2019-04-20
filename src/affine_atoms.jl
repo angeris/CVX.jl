@@ -1,31 +1,52 @@
+# ----- General affine atoms -----
 # Gets indices of a given expression
-struct IndexFun <: DisciplinedFunction
+export getindex
+
+struct IndexFunction <: DisciplinedFunction
     child::DisciplinedFunction
     indices::UnitRange{Int64} # TODO: For now
 end
 
 # There is probably a better thing to do here
-curvature(f::IndexFun) = curvature(f.child)
-slope(f::IndexFun) = slope(f.child)
-sign(f::IndexFun) = sign(f.child)
+curvature(f::IndexFunction) = curvature(f.child)
+slope(f::IndexFunction) = slope(f.child)
+sign(f::IndexFunction) = sign(f.child)
 
-getindex(v::Variable, idx::Int64) = IndexFun(v, i:i)
-getindex(v::Variable, I::UnitRange{Int64}) = IndexFun(v, I)
+getindex(v::Variable, idx::Int64) = IndexFunction(v, i:i)
+getindex(v::Variable, I::UnitRange{Int64}) = IndexFunction(v, I)
+
+push_model!(m::Model, a::IndexFunction) = push_model!(m, a.child)[a.indices]
 
 
-# Inequalities and equalities
-struct EqualityConstraintExpression <: Expression
+# ----- Inequalities and equalities -----
+# Equalities
+export ==
+
+struct EqualityConstraintExpression <: ConstraintExpression
     lhs::DisciplinedFunction
     rhs::DisciplinedFunction
 end
 
 ==(lhs::DisciplinedFunction, rhs::DisciplinedFunction) = EqualityConstraintExpression(lhs, rhs)
 
-struct InequalityConstraintExpression <: Expression
+function push_model!(m::Model, c::EqualityConstraintExpression)
+    @constraint(m, push_model!(m, c.lhs) .== push_model!(m, c.rhs))
+end
+
+# Inequalities
+export ≤, ≥
+
+struct InequalityConstraintExpression <: ConstraintExpression
     lhs::DisciplinedFunction
     rhs::DisciplinedFunction
 end
 
-# This will need to be rewritten for conic-type constraints
 ≤(lhs::DisciplinedFunction, rhs::DisciplinedFunction) = InequalityConstraintExpression(lhs, rhs)
 ≥(lhs::DisciplinedFunction, rhs::DisciplinedFunction) = InequalityConstraintExpression(rhs, lhs)
+
+# TODO: Complete definitions
+≤(lhs::DisciplinedFunction, rhs::Real) = InequalityConstraintExpression(lhs, Constant(float(rhs)))
+
+function push_model!(m::Model, c::InequalityConstraintExpression)
+    @constraint(m, push_model!(m, c.lhs) .≤ push_model!(m, c.rhs))
+end
