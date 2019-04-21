@@ -1,6 +1,6 @@
 module Test
 
-include("DisciplinedProgramming.jl")
+include("Convex.jl")
 
 using .CVX
 
