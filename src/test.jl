@@ -1,6 +1,6 @@
 module Test
 
-include("CVX.jl")
+include("DisciplinedProgramming.jl")
 
 using .CVX
 
