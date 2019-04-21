@@ -10,9 +10,16 @@ include("utils.jl")
 
 include("types.jl")
 
-# Atoms
-include("variable.jl")
-include("affine_atoms.jl")
+# Basic atoms
+include("base_atoms/variable.jl")
+include("base_atoms/constant.jl")
+
+# Affine atoms
+include("affine_atoms/index_function.jl")
+
+# Expressions
+include("expressions/equality_constraint.jl")
+include("expressions/inequality_constraint.jl")
 
 # Problem construction
 include("problem_constructors.jl")

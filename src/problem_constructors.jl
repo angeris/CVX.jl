@@ -8,6 +8,8 @@ function optimize(objective::DisciplinedFunction,
 
     m = Model(with_optimizer(SCS.Optimizer))
 
+    @show typeof(push_model!(m, objective))
+
     @objective(m, Max, push_model!(m, objective))
 
     for (i, c) ∈ enumerate(constraints)

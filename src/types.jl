@@ -32,3 +32,11 @@ abstract type ObjectiveExpression <: Expression end
 
 # Expression types
 @notimplemented isconvex Expression
+
+# Other types
+ConstantTypes = Union{Real, Array{<: Real, 1}}
+FunctionOrConstantTypes = Union{DisciplinedFunction, ConstantTypes}
+
+IndexTypes = Union{Int64, UnitRange{Int64}} # TODO: For now
+
+VariableTypes = Union{VariableRef, Array{VariableRef, 1}}
