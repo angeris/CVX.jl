@@ -2,23 +2,19 @@ module Test
 
 include("Convex.jl")
 
-using .CVX
+import .Convex
+using JuMP
+using SCS
 
-v = Variable()
-c = [
-    v ≤ 1,
-    v ≤ 2
-]
+m = Model(with_optimizer(SCS.Optimizer))
 
-@show optimize(v, c)
-# optimize(v, c) = 0.9999999995433777
+@variable(m, x[1:4])
+@variable(m, y)
 
-v2 = Variable(2)
-c2 = [
-    v2 == [3.141, 3]
-]
+Convex.@convex_objective(m, Min, quad_over_lin(x, y) + x[1])
 
-@show optimize(v2[1], c2)
-# optimize(v2, c2) = 3.141000000002305
+optimize!(m)
+
+@show objective_value(m)
 
 end
